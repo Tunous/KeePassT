@@ -1,0 +1,13 @@
+<resources>
+    <string name="action_settings">Settings</string>
+    <string name="app_name">KeePassT</string>
+    <string name="change_database">Change database</string>
+    <string name="password">Password</string>
+    <string name="title_activity_database">Database</string>
+    <string name="title_activity_database_unlock">Unlock database</string>
+    <string name="title_activity_entry">Password entry</string>
+    <string name="unlock">Unlock</string>
+    <string name="unnamed_database">Unnamed database</string>
+    <string name="lock">Lock</string>
+    <string name="copy_to_clipboard">Copy to clipboard</string>
+</resources>

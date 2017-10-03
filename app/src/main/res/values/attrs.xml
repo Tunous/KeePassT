@@ -1,0 +1,14 @@
+<resources>
+    <attr name="menu" format="reference" />
+
+    <declare-styleable name="EntryDetailView">
+        <attr name="iconDrawable" format="color|reference" />
+        <attr name="title" format="string" />
+        <attr name="content" format="string" />
+        <attr name="menu" />
+    </declare-styleable>
+
+    <declare-styleable name="PopupMenuIcon">
+        <attr name="menu" />
+    </declare-styleable>
+</resources>

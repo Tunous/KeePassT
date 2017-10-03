@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <me.thanel.keepasst.entry.view.EntryDetailView
+            android:id="@+id/userNameView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:content="MyName"
+            app:iconDrawable="@drawable/ic_person"
+            app:menu="@menu/detail_username"
+            app:title="User Name" />
+
+        <me.thanel.keepasst.entry.view.EntryDetailView
+            android:id="@+id/passwordView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:content="******"
+            app:iconDrawable="@drawable/ic_key"
+            app:title="Password" />
+
+        <me.thanel.keepasst.entry.view.EntryDetailView
+            android:id="@+id/urlView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:content="https://example.com"
+            app:iconDrawable="@drawable/ic_link"
+            app:title="URL" />
+
+        <me.thanel.keepasst.entry.view.EntryDetailView
+            android:id="@+id/creationDateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:content="30/09/2017 12:00"
+            app:iconDrawable="@drawable/ic_today"
+            app:title="Created" />
+
+        <me.thanel.keepasst.entry.view.EntryDetailView
+            android:id="@+id/modificationDateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:content="30/09/2017 12:00"
+            app:iconDrawable="@drawable/ic_today"
+            app:title="Modified" />
+
+        <me.thanel.keepasst.entry.view.EntryDetailView
+            android:id="@+id/notesView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:content="Some text note for this entry"
+            app:iconDrawable="@drawable/ic_note"
+            app:title="Notes" />
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="itemBackground">#E4E4E4</color>
+
+    <color name="level1">#33B5E6</color>
+    <color name="level2">#AA66CD</color>
+    <color name="level3">#98CB00</color>
+    <color name="level4">#FFBB34</color>
+    <color name="level5">#FE4543</color>
+</resources>
