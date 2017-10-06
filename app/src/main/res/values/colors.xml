@@ -11,4 +11,8 @@
     <color name="level3">#98CB00</color>
     <color name="level4">#FFBB34</color>
     <color name="level5">#FE4543</color>
+
+    <color name="warning_color">#f4511e</color>
+    <color name="hint_color">#42000000</color>
+    <color name="success_color">#009688</color>
 </resources>

@@ -10,4 +10,14 @@
     <string name="unnamed_database">Unnamed database</string>
     <string name="lock">Lock</string>
     <string name="copy_to_clipboard">Copy to clipboard</string>
+    <string name="fingerprint_description">Confirm fingerprint to continue</string>
+    <string name="description_fingerprint_icon">Fingerprint icon</string>
+    <string name="fingerprint_hint">Touch sensor</string>
+    <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
+    <string name="fingerprint_success">Fingerprint recognized</string>
+    <string name="sign_in">Sign in</string>
+    <string name="cancel">Cancel</string>
+    <string name="enable_secure_lock_screen">Secure lock screen hasn\'t been set up.\nGo to "Settings -> Security -> Screen lock" to set up a lock screen.</string>
+    <string name="register_fingerprint">No fingerprint has been registered.\nGo to "Settings -> Security -> Fingerprint" and register at least one fingerprint.</string>
+    <string name="enable_fingerprint">Fingerprint authentication</string>
 </resources>

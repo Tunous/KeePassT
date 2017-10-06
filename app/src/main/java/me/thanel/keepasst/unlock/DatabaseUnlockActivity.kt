@@ -2,24 +2,23 @@ package me.thanel.keepasst.unlock
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import de.slackspace.openkeepass.KeePassDatabase
+import android.os.Build
+import android.support.annotation.RequiresApi
+import me.thanel.keepasst.R
 import me.thanel.keepasst.base.BaseActivity
-import me.thanel.keepasst.KeePassStorage
-import java.io.FileInputStream
+import javax.crypto.Cipher
 
-class DatabaseUnlockActivity : BaseActivity() {
-    lateinit var keePass: KeePassDatabase
-
+class DatabaseUnlockActivity : BaseActivity(), FingerprintUiHelper.Callback {
     override val displayHomeAsUpEnabled = false
 
     override fun createFragment() = DatabaseUnlockFragment()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onAuthenticated(cipher: Cipher) {
+        val unlockFragment = supportFragmentManager.findFragmentById(
+                R.id.fragmentContainer) as DatabaseUnlockFragment
 
-        val inputStream = FileInputStream(KeePassStorage.getDatabaseFile(this))
-        keePass = KeePassDatabase.getInstance(inputStream)
+        unlockFragment.onFingerprintSuccess(cipher)
     }
 
     companion object {
