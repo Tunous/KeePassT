@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/copy_username"
-        android:icon="@drawable/ic_copy"
-        android:title="@string/copy_to_clipboard"
+        android:id="@+id/toggle_password_visibility"
+        android:icon="@drawable/ic_show"
+        android:title="@string/show_password"
         app:showAsAction="ifRoom" />
 
 </menu>

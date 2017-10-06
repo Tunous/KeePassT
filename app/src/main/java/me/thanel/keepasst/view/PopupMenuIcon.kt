@@ -32,6 +32,8 @@ class PopupMenuIcon @JvmOverloads constructor(
         }
     }
 
+    val menu get() = popupMenu.menu
+
     fun setMenu(@MenuRes menuRes: Int, listener: PopupMenu.OnMenuItemClickListener? = null) {
         val menu = popupMenu.menu
         menu.clear()

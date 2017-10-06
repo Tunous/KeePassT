@@ -2,6 +2,7 @@ package me.thanel.keepasst.entry.view
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
+import android.support.v7.widget.PopupMenu
 import android.util.AttributeSet
 import android.widget.TextView
 import kotlinx.android.synthetic.main.view_entry_detail.view.*
@@ -53,6 +54,14 @@ class EntryDetailView @JvmOverloads constructor(
         }
     }
 
-    val contentView: TextView = findViewById(R.id.contentView)
+    val actionMenu get() = actionIcon.menu
+
+    fun initContentView(block: TextView.() -> Unit) {
+        contentView.block()
+    }
+
+    fun setOnMenuItemClickListener(listener: PopupMenu.OnMenuItemClickListener) {
+        actionIcon.setOnMenuItemClickListener(listener)
+    }
 }
 

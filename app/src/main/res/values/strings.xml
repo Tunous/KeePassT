@@ -23,4 +23,12 @@
     <string name="show_password">Show password</string>
     <string name="hide_password">Hide password</string>
     <string name="open_in_browser">Open in browser</string>
+    <string name="username_copied">Username copied to clipboard</string>
+    <string name="username">User Name</string>
+    <string name="url">URL</string>
+    <string name="created">Created</string>
+    <string name="modified">Modified</string>
+    <string name="notes">Notes</string>
+    <string name="password_copied">Password copied to clipboard</string>
+    <string name="url_copied">URL copied to clipboard</string>
 </resources>

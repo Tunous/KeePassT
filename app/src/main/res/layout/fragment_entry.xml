@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             app:iconDrawable="@drawable/ic_person"
             app:menu="@menu/detail_username"
-            app:title="User Name" />
+            app:title="@string/username" />
 
         <include layout="@layout/divider" />
 
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             app:iconDrawable="@drawable/ic_key"
             app:menu="@menu/detail_password"
-            app:title="Password" />
+            app:title="@string/password" />
 
         <include layout="@layout/divider" />
 
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             app:iconDrawable="@drawable/ic_link"
             app:menu="@menu/detail_url"
-            app:title="URL" />
+            app:title="@string/url" />
 
         <include layout="@layout/divider" />
 
@@ -46,15 +46,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:iconDrawable="@drawable/ic_today"
-            app:title="Created" />
-
-        <!--<include layout="@layout/divider" />-->
+            app:title="@string/created" />
 
         <me.thanel.keepasst.entry.view.EntryDetailView
             android:id="@+id/modificationDateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="Modified" />
+            app:title="@string/modified" />
 
         <include layout="@layout/divider" />
 
@@ -63,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:iconDrawable="@drawable/ic_note"
-            app:title="Notes" />
+            app:title="@string/notes" />
 
     </LinearLayout>
 
