@@ -19,6 +19,8 @@
             app:menu="@menu/detail_username"
             app:title="User Name" />
 
+        <include layout="@layout/divider" />
+
         <me.thanel.keepasst.entry.view.EntryDetailView
             android:id="@+id/passwordView"
             android:layout_width="match_parent"
@@ -26,6 +28,8 @@
             app:iconDrawable="@drawable/ic_key"
             app:menu="@menu/detail_password"
             app:title="Password" />
+
+        <include layout="@layout/divider" />
 
         <me.thanel.keepasst.entry.view.EntryDetailView
             android:id="@+id/urlView"
@@ -35,6 +39,8 @@
             app:menu="@menu/detail_url"
             app:title="URL" />
 
+        <include layout="@layout/divider" />
+
         <me.thanel.keepasst.entry.view.EntryDetailView
             android:id="@+id/creationDateView"
             android:layout_width="match_parent"
@@ -42,12 +48,15 @@
             app:iconDrawable="@drawable/ic_today"
             app:title="Created" />
 
+        <!--<include layout="@layout/divider" />-->
+
         <me.thanel.keepasst.entry.view.EntryDetailView
             android:id="@+id/modificationDateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:iconDrawable="@drawable/ic_today"
             app:title="Modified" />
+
+        <include layout="@layout/divider" />
 
         <me.thanel.keepasst.entry.view.EntryDetailView
             android:id="@+id/notesView"

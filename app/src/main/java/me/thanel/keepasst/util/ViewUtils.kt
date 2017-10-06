@@ -2,6 +2,9 @@ package me.thanel.keepasst.util
 
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.support.annotation.ColorInt
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.text.util.Linkify
 import android.view.View
 import android.widget.ImageView
@@ -23,4 +26,10 @@ fun TextView.highlightLinks() {
     Linkify.addLinks(this, Linkify.WEB_URLS)
     movementMethod = null
     linksClickable = false
+}
+
+fun ImageView.setImageDrawableTinted(drawable: Drawable, @ColorInt color: Int) {
+    val tintDrawable = DrawableCompat.wrap(drawable).mutate()
+    DrawableCompat.setTint(tintDrawable, color)
+    setImageDrawable(tintDrawable)
 }

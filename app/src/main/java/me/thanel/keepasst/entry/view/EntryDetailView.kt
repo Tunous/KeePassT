@@ -7,7 +7,9 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.view_entry_detail.view.*
 import me.thanel.keepasst.R
 import me.thanel.keepasst.util.isVisible
+import me.thanel.keepasst.util.resolveColor
 import me.thanel.keepasst.util.resolveDrawable
+import me.thanel.keepasst.util.setImageDrawableTinted
 
 class EntryDetailView @JvmOverloads constructor(
         context: Context,
@@ -21,10 +23,23 @@ class EntryDetailView @JvmOverloads constructor(
 
         val a = context.obtainStyledAttributes(
                 attrs, R.styleable.EntryDetailView, defStyleAttr, 0)
-        titleView.text = a.getText(R.styleable.EntryDetailView_title)
-        icon.setImageDrawable(a.getDrawable(R.styleable.EntryDetailView_iconDrawable))
+        val titleText = a.getText(R.styleable.EntryDetailView_title)
+        val iconDrawable = a.getDrawable(R.styleable.EntryDetailView_iconDrawable)
         val menuRes = a.getResourceId(R.styleable.EntryDetailView_menu, -1)
         a.recycle()
+
+        if (titleText != null) {
+            titleView.text = titleText
+        } else {
+            titleView.isVisible = false
+        }
+
+        if (iconDrawable != null) {
+            val color = context.resolveColor(android.R.attr.textColorSecondary)
+            icon.setImageDrawableTinted(iconDrawable, color)
+        } else {
+            icon.isVisible = false
+        }
 
         if (menuRes != -1) {
             actionIcon.setMenu(menuRes)
