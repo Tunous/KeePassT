@@ -1,19 +1,26 @@
 package me.thanel.keepasst.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.MenuRes
+import android.support.v7.view.menu.MenuBuilder
+import android.support.v7.view.menu.MenuPopupHelper
 import android.support.v7.widget.AppCompatImageView
+import android.support.v7.widget.PopupMenu
 import android.util.AttributeSet
-import android.widget.PopupMenu
 import kotlinx.android.synthetic.main.view_entry_detail.view.*
 import me.thanel.keepasst.R
 
+@SuppressLint("RestrictedApi")
 class PopupMenuIcon @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
     private val popupMenu = PopupMenu(context, this)
+    private val menuHelper = MenuPopupHelper(context, popupMenu.menu as MenuBuilder, this).apply {
+        setForceShowIcon(true)
+    }
 
     init {
         val a = context.obtainStyledAttributes(attrs, R.styleable.PopupMenuIcon, defStyleAttr, 0)
@@ -45,7 +52,7 @@ class PopupMenuIcon @JvmOverloads constructor(
         if (menu.size() == 1 && item.icon != null) {
             menu.performIdentifierAction(item.itemId, 0)
         } else {
-            popupMenu.show()
+            menuHelper.show()
         }
     }
 

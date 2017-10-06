@@ -20,4 +20,7 @@
     <string name="enable_secure_lock_screen">Secure lock screen hasn\'t been set up.\nGo to "Settings -> Security -> Screen lock" to set up a lock screen.</string>
     <string name="register_fingerprint">No fingerprint has been registered.\nGo to "Settings -> Security -> Fingerprint" and register at least one fingerprint.</string>
     <string name="enable_fingerprint">Fingerprint authentication</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="open_in_browser">Open in browser</string>
 </resources>

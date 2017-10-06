@@ -1,9 +1,11 @@
 package me.thanel.keepasst.entry
 
 import android.os.Bundle
+import android.text.InputType
 import kotlinx.android.synthetic.main.fragment_entry.*
 import me.thanel.keepasst.R
 import me.thanel.keepasst.base.BaseFragment
+import me.thanel.keepasst.util.highlightLinks
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,17 +18,30 @@ class EntryFragment : BaseFragment() {
         val id = arguments.getSerializable(EXTRA_ENTRY_ID) as UUID
         val entry = database?.getEntryByUUID(id) ?: return
 
-        with(entry) {
-            activity.title = title
+        activity.title = entry.title
 
-            userNameView.content = username
-            urlView.content = url
-            passwordView.content = password
-            notesView.content = notes
+        userNameView.contentView.apply {
+            text = entry.username
+        }
+        passwordView.contentView.apply {
+            text = entry.password
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        urlView.contentView.apply {
+            text = entry.url
+            highlightLinks()
+        }
+        notesView.contentView.apply {
+            text = entry.notes
+            setTextIsSelectable(true)
+        }
 
-            val format = SimpleDateFormat.getDateTimeInstance()
-            creationDateView.content = format.format(times.creationTime.time)
-            modificationDateView.content = format.format(times.lastModificationTime.time)
+        val format = SimpleDateFormat.getDateTimeInstance()
+        creationDateView.contentView.apply {
+            text = format.format(entry.times.creationTime.time)
+        }
+        modificationDateView.contentView.apply {
+            text = format.format(entry.times.lastModificationTime.time)
         }
     }
 
