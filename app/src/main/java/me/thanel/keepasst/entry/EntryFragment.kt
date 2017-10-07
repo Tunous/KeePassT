@@ -40,25 +40,35 @@ class EntryFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
         activity.title = entry.title
 
-        userNameView.contentView.text = entry.username
-        userNameView.setOnMenuItemClickListener(this)
-
-        passwordView.contentView.apply {
-            text = entry.password
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        if (!entry.username.isNullOrEmpty()) {
+            userNameView.contentView.text = entry.username
+            userNameView.setOnMenuItemClickListener(this)
+        } else {
+            userNameView.isVisible = false
+            userNameDivider.isVisible = false
         }
-        passwordView.setOnMenuItemClickListener(this)
-        updatePasswordMenuItem()
 
-        urlView.contentView.apply {
-            text = entry.url
-            highlightLinks()
+        if (!entry.password.isNullOrEmpty()) {
+            passwordView.contentView.apply {
+                text = entry.password
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
+            passwordView.setOnMenuItemClickListener(this)
+            updatePasswordMenuItem()
+        } else {
+            passwordView.isVisible = false
+            passwordDivider.isVisible = false
         }
-        urlView.setOnMenuItemClickListener(this)
 
-        notesView.contentView.apply {
-            text = entry.notes
-            setTextIsSelectable(true)
+        if (!entry.url.isNullOrEmpty()) {
+            urlView.contentView.apply {
+                text = entry.url
+                highlightLinks()
+            }
+            urlView.setOnMenuItemClickListener(this)
+        } else {
+            urlView.isVisible = false
+            urlDivider.isVisible = false
         }
 
         creationDateView.contentView.text = formatTime(entry.times.creationTime)
@@ -76,12 +86,28 @@ class EntryFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         } else {
             expirationDateView.isVisible = false
         }
+
+        if (!entry.notes.isNullOrEmpty()) {
+            notesView.contentView.apply {
+                text = entry.notes
+                setTextIsSelectable(true)
+            }
+        } else {
+            notesView.isVisible = false
+            notesDivider.isVisible = false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_entry, menu)
-        updatePasswordMenuItem(menu.findItem(R.id.toggle_password_visibility))
+
+        val passwordToggleItem = menu.findItem(R.id.toggle_password_visibility)
+        if (entry.password.isNullOrEmpty()) {
+            passwordToggleItem.isVisible = false
+        } else {
+            updatePasswordMenuItem(passwordToggleItem)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
