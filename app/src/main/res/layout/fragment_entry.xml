@@ -45,7 +45,7 @@
             android:id="@+id/creationDateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:iconDrawable="@drawable/ic_today"
+            app:iconDrawable="@drawable/ic_date"
             app:title="@string/created" />
 
         <me.thanel.keepasst.entry.view.EntryDetailView
@@ -53,6 +53,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/modified" />
+
+        <me.thanel.keepasst.entry.view.EntryDetailView
+            android:id="@+id/expirationDateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/expires" />
 
         <include layout="@layout/divider" />
 

@@ -1,6 +1,8 @@
 package me.thanel.keepasst.entry.view
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.support.annotation.ColorInt
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.PopupMenu
 import android.util.AttributeSet
@@ -35,12 +37,7 @@ class EntryDetailView @JvmOverloads constructor(
             titleView.isVisible = false
         }
 
-        if (iconDrawable != null) {
-            val color = context.resolveColor(android.R.attr.textColorSecondary)
-            icon.setImageDrawableTinted(iconDrawable, color)
-        } else {
-            icon.isVisible = false
-        }
+        setIcon(iconDrawable)
 
         if (menuRes != -1) {
             actionIcon.setMenu(menuRes)
@@ -56,12 +53,22 @@ class EntryDetailView @JvmOverloads constructor(
 
     val actionMenu get() = actionIcon.menu
 
-    fun initContentView(block: TextView.() -> Unit) {
-        contentView.block()
-    }
+    val contentView: TextView = findViewById(R.id.contentView)
 
     fun setOnMenuItemClickListener(listener: PopupMenu.OnMenuItemClickListener) {
         actionIcon.setOnMenuItemClickListener(listener)
+    }
+
+    fun setIcon(drawable: Drawable?, @ColorInt color: Int? = null) {
+        if (drawable == null) {
+            icon.setImageDrawable(null)
+            icon.isVisible = false
+            return
+        }
+
+        val tintColor = color ?: context.resolveColor(android.R.attr.textColorSecondary)
+        icon.setImageDrawableTinted(drawable, tintColor)
+        icon.isVisible = true
     }
 }
 

@@ -2,6 +2,7 @@ package me.thanel.keepasst.entry
 
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.PopupMenu
 import android.text.InputType
 import android.view.Menu
@@ -14,7 +15,9 @@ import me.thanel.keepasst.R
 import me.thanel.keepasst.base.BaseFragment
 import me.thanel.keepasst.util.copyToClipboard
 import me.thanel.keepasst.util.highlightLinks
+import me.thanel.keepasst.util.isVisible
 import me.thanel.keepasst.util.openInBrowser
+import org.ocpsoft.prettytime.PrettyTime
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,35 +40,41 @@ class EntryFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
         activity.title = entry.title
 
-        userNameView.initContentView {
-            text = entry.username
-        }
+        userNameView.contentView.text = entry.username
         userNameView.setOnMenuItemClickListener(this)
 
-        passwordView.initContentView {
+        passwordView.contentView.apply {
             text = entry.password
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
         passwordView.setOnMenuItemClickListener(this)
         updatePasswordMenuItem()
 
-        urlView.initContentView {
+        urlView.contentView.apply {
             text = entry.url
             highlightLinks()
         }
         urlView.setOnMenuItemClickListener(this)
 
-        notesView.initContentView {
+        notesView.contentView.apply {
             text = entry.notes
             setTextIsSelectable(true)
         }
 
-        val format = SimpleDateFormat.getDateTimeInstance()
-        creationDateView.initContentView {
-            text = format.format(entry.times.creationTime.time)
-        }
-        modificationDateView.initContentView {
-            text = format.format(entry.times.lastModificationTime.time)
+        creationDateView.contentView.text = formatTime(entry.times.creationTime)
+        modificationDateView.contentView.text = formatTime(entry.times.lastModificationTime)
+        if (entry.times.expires()) {
+            val expiryTime = entry.times.expiryTime
+            expirationDateView.contentView.text = formatTime(expiryTime)
+
+            if (expiryTime.before(Calendar.getInstance())) {
+                // If the password has expired display colored warning icon
+                val icon = ContextCompat.getDrawable(context, R.drawable.ic_warning)
+                val color = ContextCompat.getColor(context, R.color.warning_color)
+                expirationDateView.setIcon(icon, color)
+            }
+        } else {
+            expirationDateView.isVisible = false
         }
     }
 
@@ -91,6 +100,12 @@ class EntryFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         return true
     }
 
+    private fun formatTime(calendar: Calendar): String {
+        val formattedTime = SimpleDateFormat.getDateTimeInstance().format(calendar.time)
+        val relativeTime = PrettyTime().format(calendar)
+        return getString(R.string.time_format, formattedTime, relativeTime)
+    }
+
     private fun copyUsername() {
         context.copyToClipboard(getString(R.string.username), entry.username)
         Toast.makeText(context, R.string.username_copied, Toast.LENGTH_SHORT).show()
@@ -113,7 +128,7 @@ class EntryFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     private fun togglePasswordVisibility() {
         isPasswordVisible = !isPasswordVisible
 
-        passwordView.initContentView {
+        passwordView.contentView.apply {
             val passwordFlag = if (isPasswordVisible) {
                 InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             } else {

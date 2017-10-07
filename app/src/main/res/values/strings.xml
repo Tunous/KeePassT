@@ -31,4 +31,6 @@
     <string name="notes">Notes</string>
     <string name="password_copied">Password copied to clipboard</string>
     <string name="url_copied">URL copied to clipboard</string>
+    <string name="expires">Expires</string>
+    <string name="time_format">%1$s (%2$s)</string>
 </resources>

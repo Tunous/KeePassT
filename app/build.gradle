@@ -41,6 +41,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.19'
     implementation 'com.loopeer.lib:shadow:0.0.3'
     implementation 'com.chibatching.kotpref:kotpref:2.2.0'
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 }
 
 kotlin {
