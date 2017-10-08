@@ -34,4 +34,14 @@
     <string name="expires">Expires</string>
     <string name="time_format">%1$s (%2$s)</string>
     <string name="search">Search</string>
+    <string name="search_in">Search in</string>
+    <string name="title">Title</string>
+    <string name="extra_string_fields">Extra string fields</string>
+    <string name="tags">Tags</string>
+    <string name="group_name">Group name</string>
+    <string name="options">Options</string>
+    <string name="regular_expression">Regular expression</string>
+    <string name="case_sensitive">Case sensitive</string>
+    <string name="exclude_expired">Exclude expired</string>
+    <string name="find_what">Find what</string>
 </resources>

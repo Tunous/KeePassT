@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/search_filters"
+        android:icon="@drawable/ic_filter_white"
+        android:title="@string/search_in"
+        android:visible="false"
+        app:showAsAction="ifRoom"
+        tools:visible="true">
+
+        <menu>
+            <item
+                android:id="@+id/filter_title"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/title" />
+
+            <item
+                android:id="@+id/filter_url"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/url" />
+
+            <item
+                android:id="@+id/filter_username"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/username" />
+
+            <item
+                android:id="@+id/filter_password"
+                android:checkable="true"
+                android:title="@string/password" />
+
+            <item
+                android:id="@+id/filter_notes"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/notes" />
+
+            <item
+                android:id="@+id/filter_extra"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/extra_string_fields" />
+
+            <item
+                android:id="@+id/filter_tags"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/tags" />
+
+            <item
+                android:id="@+id/filter_group_name"
+                android:checkable="true"
+                android:title="@string/group_name" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/search_options"
+        android:icon="@drawable/ic_tune_white"
+        android:title="@string/options"
+        android:visible="false"
+        app:showAsAction="ifRoom"
+        tools:visible="true">
+
+        <menu>
+            <item
+                android:id="@+id/option_regex"
+                android:checkable="true"
+                android:title="@string/regular_expression" />
+
+            <item
+                android:id="@+id/option_case_sensitive"
+                android:checkable="true"
+                android:title="@string/case_sensitive" />
+
+            <item
+                android:id="@+id/option_exclude_expired"
+                android:checkable="true"
+                android:title="@string/exclude_expired" />
+        </menu>
+    </item>
+</menu>

@@ -19,6 +19,8 @@ import me.thanel.keepasst.entry.EntryActivity
 class DatabaseFragment : BaseFragment() {
     private val groupAdapter = FastItemAdapter<BaseEntryItem>()
     private val flatAdapter = FastItemAdapter<BaseEntryItem>()
+    private val searchOptions = SearchOptions()
+    private var searchText: String? = null
 
     override val layoutResId = R.layout.fragment_database
 
@@ -34,7 +36,8 @@ class DatabaseFragment : BaseFragment() {
         setupClickListeners()
 
         flatAdapter.itemFilter.withFilterPredicate { item, constraint ->
-            constraint != null && item is FilterableItem && item.filter(constraint.toString())
+            constraint != null && item is FilterableItem &&
+                    item.filter(constraint.toString(), searchOptions)
         }
 
         databaseRecyclerView.apply {
@@ -60,31 +63,71 @@ class DatabaseFragment : BaseFragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_database, menu)
+        inflater.inflate(R.menu.advanced_search, menu)
+
+        val lockItem = menu.findItem(R.id.action_lock)
+        val filtersItem = menu.findItem(R.id.search_filters)
+        val optionsItem = menu.findItem(R.id.search_options)
 
         val searchItem = menu.findItem(R.id.search)
         val searchView = searchItem.actionView as SearchView
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 databaseRecyclerView.adapter = flatAdapter
+                lockItem.isVisible = false
+                filtersItem.isVisible = true
+                optionsItem.isVisible = true
                 return true
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 databaseRecyclerView.adapter = groupAdapter
+                lockItem.isVisible = true
+                filtersItem.isVisible = false
+                optionsItem.isVisible = false
                 return true
             }
         })
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                searchText = query
                 flatAdapter.filter(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                searchText = newText
                 flatAdapter.filter(newText)
                 return true
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.isCheckable) {
+            item.isChecked = !item.isChecked
+        }
+
+        when (item.itemId) {
+            R.id.filter_title -> searchOptions.filterByTitle = item.isChecked
+            R.id.filter_url -> searchOptions.filterByUrl = item.isChecked
+            R.id.filter_username -> searchOptions.filterByUsername = item.isChecked
+            R.id.filter_password -> searchOptions.filterByPassword = item.isChecked
+            R.id.filter_notes -> searchOptions.filterByNotes = item.isChecked
+            R.id.filter_extra -> searchOptions.filterByExtras = item.isChecked
+            R.id.filter_tags -> searchOptions.filterByTags = item.isChecked
+            R.id.filter_group_name -> searchOptions.filterByTitle = item.isChecked
+
+            R.id.option_regex -> searchOptions.matchByRegex = item.isChecked
+            R.id.option_case_sensitive -> searchOptions.caseSensitive = item.isChecked
+            R.id.option_exclude_expired -> searchOptions.excludeExpired = item.isChecked
+
+            else -> return super.onOptionsItemSelected(item)
+        }
+
+        flatAdapter.filter(searchText)
+
+        return false
     }
 
     private fun setupClickListeners() {
