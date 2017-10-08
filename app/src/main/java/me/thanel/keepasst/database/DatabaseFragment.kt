@@ -36,8 +36,7 @@ class DatabaseFragment : BaseFragment() {
         setupClickListeners()
 
         flatAdapter.itemFilter.withFilterPredicate { item, constraint ->
-            constraint != null && item is FilterableItem &&
-                    item.filter(constraint.toString(), searchOptions)
+            item is FilterableItem && item.filter(constraint?.toString(), searchOptions)
         }
 
         databaseRecyclerView.apply {

@@ -1,11 +1,12 @@
 package me.thanel.keepasst.database
 
+import android.graphics.Paint
 import de.slackspace.openkeepass.domain.Entry
 import kotlinx.android.synthetic.main.item_entry.view.*
 import me.thanel.keepasst.R
+import me.thanel.keepasst.util.hasExpired
 import me.thanel.keepasst.util.isVisible
 import me.thanel.keepasst.util.setImageByteArray
-import java.util.*
 
 class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level), FilterableItem {
     var filterText = ""
@@ -16,6 +17,11 @@ class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level), Filterable
         super.bindView(holder, payloads)
         with(holder.itemView) {
             entryTitle.text = entry.title
+            if (entry.hasExpired) {
+                entryTitle.paintFlags = entryTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                entryTitle.paintFlags = entryTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            }
             filterTextView.text = filterText
             filterTextView.isVisible = filterText.isNotEmpty()
             groupIcon.setImageByteArray(entry.iconData)
@@ -23,15 +29,13 @@ class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level), Filterable
     }
 
     override fun filter(constraint: String?, options: SearchOptions): Boolean {
+        if (options.excludeExpired && entry.hasExpired) return true
+
         // If filter text is empty keep this entry visible
         if (constraint == null || constraint.isEmpty()) {
             filterText = ""
             return false
         }
-
-        val hasExpired = entry.times.expires() &&
-                entry.times.expiryTime.before(Calendar.getInstance())
-        if (options.excludeExpired && hasExpired) return true
 
         val ignoreCase = !options.caseSensitive
 
