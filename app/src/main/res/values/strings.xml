@@ -33,4 +33,5 @@
     <string name="url_copied">URL copied to clipboard</string>
     <string name="expires">Expires</string>
     <string name="time_format">%1$s (%2$s)</string>
+    <string name="search">Search</string>
 </resources>
