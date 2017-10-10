@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/detailsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -45,6 +46,10 @@
 
         <include
             android:id="@+id/urlDivider"
+            layout="@layout/divider" />
+
+        <include
+            android:id="@+id/propertiesDivider"
             layout="@layout/divider" />
 
         <me.thanel.keepasst.entry.view.EntryDetailView

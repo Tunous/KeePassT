@@ -3,9 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/copy_property"
+        android:icon="@drawable/ic_copy"
+        android:title="@string/copy_to_clipboard"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/toggle_visibility"
-        android:icon="@drawable/ic_hidden"
-        android:title="@string/show_all"
+        android:icon="@drawable/ic_shown"
+        android:title="@string/show"
         app:showAsAction="ifRoom" />
 
 </menu>
