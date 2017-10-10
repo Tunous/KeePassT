@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.view_entry_detail.view.*
 import me.thanel.keepasst.R
 import me.thanel.keepasst.util.isVisible
 import me.thanel.keepasst.util.resolveColor
-import me.thanel.keepasst.util.resolveDrawable
 import me.thanel.keepasst.util.setImageDrawableTinted
 import me.thanel.keepasst.view.PopupMenuIcon
 
@@ -29,8 +28,6 @@ class EntryDetailView @JvmOverloads constructor(
 
         actionIcon = findViewById(R.id.actionIcon)
         contentView = findViewById(R.id.contentView)
-
-        background = context.resolveDrawable(R.attr.selectableItemBackground)
 
         val a = context.obtainStyledAttributes(
                 attrs, R.styleable.EntryDetailView, defStyleAttr, 0)
