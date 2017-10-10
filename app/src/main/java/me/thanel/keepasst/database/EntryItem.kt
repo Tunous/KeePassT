@@ -44,7 +44,7 @@ class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level), Filterable
             return false
         }
         if (options.filterByUsername && entry.username.contains(constraint, ignoreCase)) {
-            filterText = "Matches username"
+            filterText = "Matches user name"
             return false
         }
         if (options.filterByNotes && entry.notes.contains(constraint, ignoreCase)) {

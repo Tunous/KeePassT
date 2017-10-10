@@ -23,8 +23,8 @@
     <string name="show">Show</string>
     <string name="hide">Hide</string>
     <string name="open_in_browser">Open in browser</string>
-    <string name="username_copied">Username copied to clipboard</string>
-    <string name="username">User Name</string>
+    <string name="username_copied">User name copied to clipboard</string>
+    <string name="username">User name</string>
     <string name="url">URL</string>
     <string name="created">Created</string>
     <string name="modified">Modified</string>
