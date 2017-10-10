@@ -113,7 +113,7 @@ class DatabaseFragment : BaseFragment() {
             R.id.filter_username -> searchOptions.filterByUsername = item.isChecked
             R.id.filter_password -> searchOptions.filterByPassword = item.isChecked
             R.id.filter_notes -> searchOptions.filterByNotes = item.isChecked
-            R.id.filter_extra -> searchOptions.filterByExtras = item.isChecked
+            R.id.filter_properties -> searchOptions.filterByProperties = item.isChecked
             R.id.filter_tags -> searchOptions.filterByTags = item.isChecked
             R.id.filter_group_name -> searchOptions.filterByTitle = item.isChecked
 

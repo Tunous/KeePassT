@@ -59,6 +59,13 @@ class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level), Filterable
             filterText = "Matches url"
             return false
         }
+        if (options.filterByProperties && entry.customProperties.any {
+            it.value.contains(constraint, ignoreCase)
+        }) {
+            filterText = "Matches custom property"
+            return false
+        }
+
         return true
         // TODO:
         //  - filter by tags

@@ -6,7 +6,7 @@ data class SearchOptions(
         var filterByUsername: Boolean = true,
         var filterByPassword: Boolean = false,
         var filterByNotes: Boolean = true,
-        var filterByExtras: Boolean = true,
+        var filterByProperties: Boolean = true,
         var filterByTags: Boolean = true,
         var filterByGroupName: Boolean = false,
 

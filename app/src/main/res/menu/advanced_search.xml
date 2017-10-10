@@ -42,10 +42,10 @@
                 android:title="@string/notes" />
 
             <item
-                android:id="@+id/filter_extra"
+                android:id="@+id/filter_properties"
                 android:checkable="true"
                 android:checked="true"
-                android:title="@string/extra_string_fields" />
+                android:title="@string/properties" />
 
             <item
                 android:id="@+id/filter_tags"
