@@ -47,15 +47,19 @@
                 android:checked="true"
                 android:title="@string/properties" />
 
+            <!-- TODO: Searching by tags -->
             <item
                 android:id="@+id/filter_tags"
                 android:checkable="true"
                 android:checked="true"
+                android:enabled="false"
                 android:title="@string/tags" />
 
+            <!-- TODO: Searching by group name -->
             <item
                 android:id="@+id/filter_group_name"
                 android:checkable="true"
+                android:enabled="false"
                 android:title="@string/group_name" />
         </menu>
     </item>
@@ -69,9 +73,11 @@
         tools:visible="true">
 
         <menu>
+            <!-- TODO: Regex search -->
             <item
                 android:id="@+id/option_regex"
                 android:checkable="true"
+                android:enabled="false"
                 android:title="@string/regular_expression" />
 
             <item
