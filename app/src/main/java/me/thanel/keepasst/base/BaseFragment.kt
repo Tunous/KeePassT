@@ -11,7 +11,7 @@ import me.thanel.keepasst.KeePassStorage
 
 abstract class BaseFragment : Fragment() {
     protected val database: KeePassFile?
-        get() = KeePassStorage.get(context)
+        get() = KeePassStorage.get()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?): View? {

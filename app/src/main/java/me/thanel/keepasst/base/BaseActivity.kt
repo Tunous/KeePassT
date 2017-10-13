@@ -46,7 +46,7 @@ abstract class BaseActivity : AppCompatActivity() {
     private fun checkDatabase() {
         if (!requireDatabase || isFinishing) return
 
-        val database = KeePassStorage.get(this)
+        val database = KeePassStorage.get()
         if (database == null) {
             startActivity(DatabaseUnlockActivity.newIntent(this)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))

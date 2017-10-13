@@ -18,7 +18,7 @@ class DatabaseActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val database = KeePassStorage.get(this)
+        val database = KeePassStorage.get()
         if (database == null) {
             lockDatabaseAndFinish()
             return

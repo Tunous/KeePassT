@@ -5,32 +5,24 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
-import android.os.SystemClock
 import android.util.Log
 import de.slackspace.openkeepass.domain.KeePassFile
 import java.io.File
-import java.util.concurrent.TimeUnit
 
 object KeePassStorage {
-    private val authTimeoutMillis = TimeUnit.MINUTES.toMillis(5)
+    private val TAG = KeePassStorage::class.java.simpleName
     private var keePassFile: KeePassFile? = null
-    private var lastAuthTime = 0L
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (Intent.ACTION_SCREEN_OFF == intent.action) {
-                Log.d(KeePassStorage::class.java.simpleName, "Screen off, clean keepass file")
+                Log.d(TAG, "Screen off, locking database")
                 set(context, null)
             }
         }
     }
 
-    fun get(context: Context): KeePassFile? {
-        if (keePassFile != null && hasExpired()) {
-            set(context, null)
-        }
-        return keePassFile
-    }
+    fun get() = keePassFile
 
     fun set(context: Context, file: KeePassFile?) {
         if (keePassFile == null && file != null) {
@@ -41,7 +33,6 @@ object KeePassStorage {
             context.applicationContext.unregisterReceiver(broadcastReceiver)
         }
         keePassFile = file
-        lastAuthTime = SystemClock.elapsedRealtime()
     }
 
     fun getDatabaseFile(context: Context): File {
@@ -60,6 +51,4 @@ object KeePassStorage {
         context.applicationContext
                 .registerReceiver(broadcastReceiver, screenOffFilter)
     }
-
-    private fun hasExpired() = SystemClock.elapsedRealtime() - lastAuthTime > authTimeoutMillis
 }
