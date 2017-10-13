@@ -62,6 +62,7 @@ class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level) {
             MatchType.GroupName -> TODO()
         }
 
+        // TODO: Extract to string resources
         val title = when (result.matchType) {
             MatchType.Title -> "Title"
             MatchType.Url -> "Url"
@@ -73,9 +74,47 @@ class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level) {
             MatchType.GroupName -> "Group name"
         }
 
+        return trimAndHighlight(text, result.startIndex, length)
+                .insert(0, "$title: ")
+    }
+
+    private fun trimAndHighlight(text: String, start: Int, length: Int): SpannableStringBuilder {
+        val lines = text.split("\n")
+        if (lines.size == 1) {
+            return highlightMatch(text, start, length)
+        }
+
+        // Find the number and start position of line with the filter constraint
+        var pos = 0
+        var lineWithMatchIndex = 0
+        for ((index, line) in lines.withIndex()) {
+            pos += line.length
+            if (pos > start) {
+                lineWithMatchIndex = index
+                break
+            }
+        }
+
+        val lineWithMatch = lines[lineWithMatchIndex]
+        val lineWithMatchPos = pos - lineWithMatch.length
+        // New start position is calculated by distracting from it the about of characters before
+        // the matched lines and also by distracting the index of matched line, which corresponds
+        // to the number of removed newline characters.
+        val newStart = start - lineWithMatchPos - lineWithMatchIndex
+        val builder = highlightMatch(lineWithMatch, newStart, length)
+        if (lineWithMatchIndex > 0) {
+            builder.insert(0, "…")
+        }
+        if (lineWithMatchIndex < lines.size - 1) {
+            builder.append("…")
+        }
+        return builder
+    }
+
+    private fun highlightMatch(text: String, start: Int, length: Int): SpannableStringBuilder {
         return SpannableStringBuilder(text).apply {
-            setSpan(StyleSpan(Typeface.BOLD), result.startIndex, result.startIndex + length,
+            setSpan(StyleSpan(Typeface.BOLD), start, start + length,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }.insert(0, "$title: ")
+        }
     }
 }
