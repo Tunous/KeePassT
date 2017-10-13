@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.StyleSpan
 import de.slackspace.openkeepass.domain.Entry
+import de.slackspace.openkeepass.domain.KeePassFile
 import kotlinx.android.synthetic.main.item_entry.view.*
 import me.thanel.keepasst.R
 import me.thanel.keepasst.entry.matcher.EntryMatcher
@@ -35,8 +36,8 @@ class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level) {
         }
     }
 
-    fun filter(constraint: String?, matcher: EntryMatcher): Boolean {
-        val result = matcher.matches(entry, constraint)
+    fun filter(constraint: String?, matcher: EntryMatcher, database: KeePassFile): Boolean {
+        val result = matcher.matches(database, entry, constraint)
         if (result is MatchResult.Success) {
             filterText = generateMatchText(result, constraint!!.length)
             return false

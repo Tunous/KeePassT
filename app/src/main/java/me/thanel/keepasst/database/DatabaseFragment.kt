@@ -37,7 +37,7 @@ class DatabaseFragment : BaseFragment() {
         setupClickListeners()
 
         flatAdapter.itemFilter.withFilterPredicate { item, constraint ->
-            item is EntryItem && item.filter(constraint?.toString(), entryMatcher)
+            item is EntryItem && item.filter(constraint?.toString(), entryMatcher, database)
         }
 
         databaseRecyclerView.apply {
@@ -129,6 +129,7 @@ class DatabaseFragment : BaseFragment() {
             R.id.option_regex -> entryMatcher.matchByRegex = item.isChecked
             R.id.option_case_sensitive -> entryMatcher.caseSensitive = item.isChecked
             R.id.option_exclude_expired -> entryMatcher.excludeExpired = item.isChecked
+            R.id.option_search_in_recycle_bin -> entryMatcher.searchInRecycleBin = item.isChecked
 
             else -> return super.onOptionsItemSelected(item)
         }

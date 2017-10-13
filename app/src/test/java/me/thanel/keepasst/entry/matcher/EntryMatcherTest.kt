@@ -4,6 +4,9 @@ package me.thanel.keepasst.entry.matcher
 
 import de.slackspace.openkeepass.domain.Entry
 import de.slackspace.openkeepass.domain.EntryBuilder
+import de.slackspace.openkeepass.domain.GroupBuilder
+import de.slackspace.openkeepass.domain.KeePassFileBuilder
+import de.slackspace.openkeepass.domain.MetaBuilder
 import de.slackspace.openkeepass.domain.Property
 import de.slackspace.openkeepass.domain.TimesBuilder
 import org.junit.Assert.assertEquals
@@ -12,17 +15,31 @@ import org.junit.Test
 import java.util.*
 
 class EntryMatcherTest {
+    private val trashEntry = EntryBuilder("inTrashEntry").build()
+    private val topEntry = EntryBuilder("topEntry").build()
+    private val recycleBin = GroupBuilder("Recycle Bin")
+            .addEntry(trashEntry)
+            .build()
+    private val database = KeePassFileBuilder("TestDatabase.kdbx")
+            .addTopEntries(topEntry)
+            .addTopGroups(recycleBin)
+            .withMeta(MetaBuilder("TestDatabase.kdbx")
+                    .recycleBinEnabled(true)
+                    .recycleBinUuid(recycleBin.uuid)
+                    .build())
+            .build()
+
     @Test
     fun `Should mach entry by title`() {
         with(buildMatcher()) {
             val entry = buildEntry()
             filterByTitle = true
-            val enabledResult = matches(entry, "title")
+            val enabledResult = matches(database, entry, "title")
             assertTrue(enabledResult is MatchResult.Success)
             assertTrue((enabledResult as MatchResult.Success).matchType == MatchType.Title)
 
             filterByTitle = false
-            val disabledResult = matches(entry, "title")
+            val disabledResult = matches(database, entry, "title")
             assertTrue(disabledResult is MatchResult.Failure)
         }
     }
@@ -32,12 +49,12 @@ class EntryMatcherTest {
         with(buildMatcher()) {
             val entry = buildEntry()
             filterByUrl = true
-            val enabledResult = matches(entry, "url")
+            val enabledResult = matches(database, entry, "url")
             assertTrue(enabledResult is MatchResult.Success)
             assertTrue((enabledResult as MatchResult.Success).matchType == MatchType.Url)
 
             filterByUrl = false
-            val disabledResult = matches(entry, "url")
+            val disabledResult = matches(database, entry, "url")
             assertTrue(disabledResult is MatchResult.Failure)
         }
     }
@@ -47,12 +64,12 @@ class EntryMatcherTest {
         with(buildMatcher()) {
             val entry = buildEntry()
             filterByUserName = true
-            val enabledResult = matches(entry, "username")
+            val enabledResult = matches(database, entry, "username")
             assertTrue(enabledResult is MatchResult.Success)
             assertTrue((enabledResult as MatchResult.Success).matchType == MatchType.UserName)
 
             filterByUserName = false
-            val disabledResult = matches(entry, "username")
+            val disabledResult = matches(database, entry, "username")
             assertTrue(disabledResult is MatchResult.Failure)
         }
     }
@@ -62,12 +79,12 @@ class EntryMatcherTest {
         with(buildMatcher()) {
             val entry = buildEntry()
             filterByPassword = true
-            val enabledResult = matches(entry, "password")
+            val enabledResult = matches(database, entry, "password")
             assertTrue(enabledResult is MatchResult.Success)
             assertTrue((enabledResult as MatchResult.Success).matchType == MatchType.Password)
 
             filterByPassword = false
-            val disabledResult = matches(entry, "password")
+            val disabledResult = matches(database, entry, "password")
             assertTrue(disabledResult is MatchResult.Failure)
         }
     }
@@ -77,12 +94,12 @@ class EntryMatcherTest {
         with(buildMatcher()) {
             val entry = buildEntry()
             filterByNotes = true
-            val enabledResult = matches(entry, "notes")
+            val enabledResult = matches(database, entry, "notes")
             assertTrue(enabledResult is MatchResult.Success)
             assertTrue((enabledResult as MatchResult.Success).matchType == MatchType.Notes)
 
             filterByNotes = false
-            val disabledResult = matches(entry, "notes")
+            val disabledResult = matches(database, entry, "notes")
             assertTrue(disabledResult is MatchResult.Failure)
         }
     }
@@ -92,13 +109,13 @@ class EntryMatcherTest {
         with(buildMatcher()) {
             val entry = buildEntry()
             filterByProperties = true
-            val enabledResult = matches(entry, "property")
+            val enabledResult = matches(database, entry, "property")
             assertTrue(enabledResult is MatchResult.Success)
             assertTrue((enabledResult as MatchResult.Success).matchType == MatchType.Property)
             assertEquals(entry.customProperties[0], enabledResult.matchedProperty)
 
             filterByProperties = false
-            val disabledResult = matches(entry, "property")
+            val disabledResult = matches(database, entry, "property")
             assertTrue(disabledResult is MatchResult.Failure)
         }
     }
@@ -108,13 +125,13 @@ class EntryMatcherTest {
         with(buildMatcher()) {
             val entry = buildEntry()
             filterByProperties = true
-            val enabledResult = matches(entry, "protected")
+            val enabledResult = matches(database, entry, "protected")
             assertTrue(enabledResult is MatchResult.Success)
             assertTrue((enabledResult as MatchResult.Success).matchType == MatchType.Property)
             assertEquals(entry.customProperties[1], enabledResult.matchedProperty)
 
             filterByProperties = false
-            val disabledResult = matches(entry, "protected")
+            val disabledResult = matches(database, entry, "protected")
             assertTrue(disabledResult is MatchResult.Failure)
         }
     }
@@ -122,10 +139,10 @@ class EntryMatcherTest {
     @Test
     fun `Should match all entries given empty constraint`() {
         with(buildMatcher()) {
-            assertTrue(matches(buildEntry(), null) is MatchResult.All)
-            assertTrue(matches(buildEntry(), "") is MatchResult.All)
-            assertTrue(matches(buildExpiredEntry(), null) is MatchResult.All)
-            assertTrue(matches(buildExpiredEntry(), "") is MatchResult.All)
+            assertTrue(matches(database, buildEntry(), null) is MatchResult.All)
+            assertTrue(matches(database, buildEntry(), "") is MatchResult.All)
+            assertTrue(matches(database, buildExpiredEntry(), null) is MatchResult.All)
+            assertTrue(matches(database, buildExpiredEntry(), "") is MatchResult.All)
         }
     }
 
@@ -133,10 +150,10 @@ class EntryMatcherTest {
     fun `Should match expired entries`() {
         with(buildMatcher()) {
             excludeExpired = true
-            assertTrue(matches(buildExpiredEntry(), "title") is MatchResult.Failure)
+            assertTrue(matches(database, buildExpiredEntry(), "title") is MatchResult.Failure)
 
             excludeExpired = false
-            assertTrue(matches(buildExpiredEntry(), "title") is MatchResult.Success)
+            assertTrue(matches(database, buildExpiredEntry(), "title") is MatchResult.Success)
         }
     }
 
@@ -145,12 +162,22 @@ class EntryMatcherTest {
         with(buildMatcher()) {
             val entry = buildEntry()
             caseSensitive = true
-            assertTrue(matches(entry, "title") is MatchResult.Success)
-            assertTrue(matches(entry, "tiTle") is MatchResult.Failure)
+            assertTrue(matches(database, entry, "title") is MatchResult.Success)
+            assertTrue(matches(database, entry, "tiTle") is MatchResult.Failure)
 
             caseSensitive = false
-            assertTrue(matches(entry, "title") is MatchResult.Success)
-            assertTrue(matches(entry, "tiTle") is MatchResult.Success)
+            assertTrue(matches(database, entry, "title") is MatchResult.Success)
+            assertTrue(matches(database, entry, "tiTle") is MatchResult.Success)
+        }
+    }
+
+    @Test
+    fun `Should respect in-trash search setting`() {
+        with(buildMatcher()) {
+            searchInRecycleBin = true
+            assertTrue(matches(database, trashEntry, "inTrash") is MatchResult.Success)
+            searchInRecycleBin = false
+            assertTrue(matches(database, trashEntry, "inTrash") is MatchResult.Failure)
         }
     }
 

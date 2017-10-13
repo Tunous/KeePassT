@@ -1,7 +1,10 @@
 package me.thanel.keepasst.entry.matcher
 
 import de.slackspace.openkeepass.domain.Entry
+import de.slackspace.openkeepass.domain.KeePassFile
+import me.thanel.keepasst.util.containsEntry
 import me.thanel.keepasst.util.hasExpired
+import me.thanel.keepasst.util.recycleBin
 
 class EntryMatcher {
     var filterByTitle: Boolean = true
@@ -16,10 +19,18 @@ class EntryMatcher {
     var matchByRegex: Boolean = false
     var caseSensitive: Boolean = false
     var excludeExpired: Boolean = false
+    var searchInRecycleBin: Boolean = true
 
-    fun matches(entry: Entry, constraint: String?): MatchResult {
+    fun matches(database: KeePassFile, entry: Entry, constraint: String?): MatchResult {
         if (excludeExpired && entry.hasExpired) {
             return MatchResult.Failure()
+        }
+
+        if (!searchInRecycleBin) {
+            val recycleBin = database.recycleBin
+            if (recycleBin != null && recycleBin.containsEntry(entry.uuid)) {
+                return MatchResult.Failure()
+            }
         }
 
         if (constraint == null || constraint.isEmpty()) {

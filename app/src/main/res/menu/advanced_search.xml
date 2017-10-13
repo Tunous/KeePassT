@@ -89,6 +89,12 @@
                 android:id="@+id/option_exclude_expired"
                 android:checkable="true"
                 android:title="@string/exclude_expired" />
+
+            <item
+                android:id="@+id/option_search_in_recycle_bin"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/search_in_recycle_bin" />
         </menu>
     </item>
 </menu>
