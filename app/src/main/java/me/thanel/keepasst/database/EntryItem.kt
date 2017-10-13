@@ -1,15 +1,22 @@
 package me.thanel.keepasst.database
 
 import android.graphics.Paint
+import android.graphics.Typeface
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.StyleSpan
 import de.slackspace.openkeepass.domain.Entry
 import kotlinx.android.synthetic.main.item_entry.view.*
 import me.thanel.keepasst.R
+import me.thanel.keepasst.entry.matcher.EntryMatcher
+import me.thanel.keepasst.entry.matcher.MatchResult
+import me.thanel.keepasst.entry.matcher.MatchType
 import me.thanel.keepasst.util.hasExpired
 import me.thanel.keepasst.util.isVisible
 import me.thanel.keepasst.util.setImageByteArray
 
-class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level), FilterableItem {
-    var filterText = ""
+class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level) {
+    var filterText: CharSequence? = null
 
     override fun getType() = R.id.item_type_entry
 
@@ -23,53 +30,52 @@ class EntryItem(val entry: Entry, level: Int) : BaseEntryItem(level), Filterable
                 entryTitle.paintFlags = entryTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
             filterTextView.text = filterText
-            filterTextView.isVisible = filterText.isNotEmpty()
+            filterTextView.isVisible = !filterText.isNullOrEmpty()
             groupIcon.setImageByteArray(entry.iconData)
         }
     }
 
-    override fun filter(constraint: String?, options: SearchOptions): Boolean {
-        if (options.excludeExpired && entry.hasExpired) return true
-
-        // If filter text is empty keep this entry visible
-        if (constraint == null || constraint.isEmpty()) {
-            filterText = ""
+    fun filter(constraint: String?, matcher: EntryMatcher): Boolean {
+        val result = matcher.matches(entry, constraint)
+        if (result is MatchResult.Success) {
+            filterText = generateMatchText(result, constraint!!.length)
             return false
         }
-
-        val ignoreCase = !options.caseSensitive
-
-        if (options.filterByTitle && entry.title.contains(constraint, ignoreCase)) {
-            filterText = "Matches title"
+        if (result is MatchResult.All) {
+            filterText = null
             return false
         }
-        if (options.filterByUsername && entry.username.contains(constraint, ignoreCase)) {
-            filterText = "Matches user name"
-            return false
-        }
-        if (options.filterByNotes && entry.notes.contains(constraint, ignoreCase)) {
-            filterText = "Matches notes"
-            return false
-        }
-        if (options.filterByPassword && entry.password.contains(constraint, ignoreCase)) {
-            filterText = "Matches password"
-            return false
-        }
-        if (options.filterByUrl && entry.url.contains(constraint, ignoreCase)) {
-            filterText = "Matches url"
-            return false
-        }
-        if (options.filterByProperties && entry.customProperties.any {
-            it.value.contains(constraint, ignoreCase)
-        }) {
-            filterText = "Matches custom property"
-            return false
-        }
-
+        filterText = null
         return true
-        // TODO:
-        //  - filter by tags
-        //  - filter by group name
-        //  - regex
+    }
+
+    private fun generateMatchText(result: MatchResult.Success,
+            length: Int): SpannableStringBuilder {
+        val text = when (result.matchType) {
+            MatchType.Title -> entry.title
+            MatchType.Url -> entry.url
+            MatchType.UserName -> entry.username
+            MatchType.Password -> entry.password
+            MatchType.Notes -> entry.notes
+            MatchType.Property -> result.matchedProperty!!.value
+            MatchType.Tags -> TODO()
+            MatchType.GroupName -> TODO()
+        }
+
+        val title = when (result.matchType) {
+            MatchType.Title -> "Title"
+            MatchType.Url -> "Url"
+            MatchType.UserName -> "User name"
+            MatchType.Password -> "Password"
+            MatchType.Notes -> "Notes"
+            MatchType.Property -> result.matchedProperty!!.key
+            MatchType.Tags -> "Tags"
+            MatchType.GroupName -> "Group name"
+        }
+
+        return SpannableStringBuilder(text).apply {
+            setSpan(StyleSpan(Typeface.BOLD), result.startIndex, result.startIndex + length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }.insert(0, "$title: ")
     }
 }

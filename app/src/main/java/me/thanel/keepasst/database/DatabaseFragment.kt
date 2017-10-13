@@ -15,11 +15,12 @@ import kotlinx.android.synthetic.main.fragment_database.*
 import me.thanel.keepasst.R
 import me.thanel.keepasst.base.BaseFragment
 import me.thanel.keepasst.entry.EntryActivity
+import me.thanel.keepasst.entry.matcher.EntryMatcher
 
 class DatabaseFragment : BaseFragment() {
     private val groupAdapter = FastItemAdapter<BaseEntryItem>()
     private val flatAdapter = FastItemAdapter<BaseEntryItem>()
-    private val searchOptions = SearchOptions()
+    private val entryMatcher = EntryMatcher()
     private var searchText: String? = null
 
     override val layoutResId = R.layout.fragment_database
@@ -36,7 +37,7 @@ class DatabaseFragment : BaseFragment() {
         setupClickListeners()
 
         flatAdapter.itemFilter.withFilterPredicate { item, constraint ->
-            item is FilterableItem && item.filter(constraint?.toString(), searchOptions)
+            item is EntryItem && item.filter(constraint?.toString(), entryMatcher)
         }
 
         databaseRecyclerView.apply {
@@ -89,17 +90,25 @@ class DatabaseFragment : BaseFragment() {
         })
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                searchText = query
-                flatAdapter.filter(query)
+                onFilter(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                searchText = newText
-                flatAdapter.filter(newText)
+                onFilter(newText)
                 return true
             }
         })
+    }
+
+    private fun onFilter(query: String?) {
+        if (query.isNullOrEmpty()) {
+            flatAdapter.adapterItems
+                    .filterIsInstance<EntryItem>()
+                    .forEach { it.filterText = null }
+        }
+        searchText = query
+        flatAdapter.filter(query)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -108,18 +117,18 @@ class DatabaseFragment : BaseFragment() {
         }
 
         when (item.itemId) {
-            R.id.filter_title -> searchOptions.filterByTitle = item.isChecked
-            R.id.filter_url -> searchOptions.filterByUrl = item.isChecked
-            R.id.filter_username -> searchOptions.filterByUsername = item.isChecked
-            R.id.filter_password -> searchOptions.filterByPassword = item.isChecked
-            R.id.filter_notes -> searchOptions.filterByNotes = item.isChecked
-            R.id.filter_properties -> searchOptions.filterByProperties = item.isChecked
-            R.id.filter_tags -> searchOptions.filterByTags = item.isChecked
-            R.id.filter_group_name -> searchOptions.filterByTitle = item.isChecked
+            R.id.filter_title -> entryMatcher.filterByTitle = item.isChecked
+            R.id.filter_url -> entryMatcher.filterByUrl = item.isChecked
+            R.id.filter_username -> entryMatcher.filterByUserName = item.isChecked
+            R.id.filter_password -> entryMatcher.filterByPassword = item.isChecked
+            R.id.filter_notes -> entryMatcher.filterByNotes = item.isChecked
+            R.id.filter_properties -> entryMatcher.filterByProperties = item.isChecked
+            R.id.filter_tags -> entryMatcher.filterByTags = item.isChecked
+            R.id.filter_group_name -> entryMatcher.filterByGroupName = item.isChecked
 
-            R.id.option_regex -> searchOptions.matchByRegex = item.isChecked
-            R.id.option_case_sensitive -> searchOptions.caseSensitive = item.isChecked
-            R.id.option_exclude_expired -> searchOptions.excludeExpired = item.isChecked
+            R.id.option_regex -> entryMatcher.matchByRegex = item.isChecked
+            R.id.option_case_sensitive -> entryMatcher.caseSensitive = item.isChecked
+            R.id.option_exclude_expired -> entryMatcher.excludeExpired = item.isChecked
 
             else -> return super.onOptionsItemSelected(item)
         }
